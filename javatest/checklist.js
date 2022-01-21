@@ -62,6 +62,9 @@ fetch(
   })
   .then(function (data) {
     container = document.querySelector("#meilleurfilm");
+    // insérer le résumé du film ici
+
+    console.info(data.results[0].id);
     document.querySelector("#meilleurfilm").innerHTML =
       `<p class= "nomdumeilleurfilm">` +
       data.results[0].title +
@@ -73,7 +76,21 @@ fetch(
       "/>";
     containerimg = container.querySelectorAll("img");
     imgfetch(containerimg);
+    fetch_resume(containerimg);
   });
+//function pour get le resumé  du film
+function fetch_resume(containerimg) {
+  let id = containerimg[0].className.split("_")[1];
+  fetch("http://localhost:8000/api/v1/titles/" + id)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      let description = data.description;
+      document.querySelector("#resume").innerHTML = description;
+    });
+}
+
 function carrousel(genre, containerid) {
   let imgactive = 1;
   url =
